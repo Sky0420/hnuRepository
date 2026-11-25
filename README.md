@@ -1,4 +1,4 @@
-# La Baroque 카페 홈페이지
+# La Baroque Created by 홍길동
 
 바로크 스타일의 분위기를 적용한 카페 소개 홈페이지입니다. 별도의 프레임워크 없이 HTML, CSS, JavaScript만으로 제작했습니다.
 
