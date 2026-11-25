@@ -53,7 +53,8 @@
     .brand strong { display: block; font-size: 27px; letter-spacing: .12em; }
     .brand span { color: var(--gold); font-size: 9px; letter-spacing: .38em; }
     nav a { color: inherit; text-decoration: none; font-size: 13px; letter-spacing: .12em; }
-    nav > div:last-child { display: flex; gap: 28px; }
+    nav > div:last-child { display: flex; gap: 0; }
+    nav > div:last-child a { display: none; }
     .hero {
       min-height: 680px;
       height: 88vh;
@@ -141,13 +142,54 @@
       .menu-grid { grid-template-columns: 1fr; }
       section { padding: 65px 6%; }
     }
+    body, section, .menu-card, .intro-image, footer, h2, .intro p, .detail, nav {
+      transition: background-color .45s ease, color .45s ease, border-color .45s ease, box-shadow .45s ease;
+    }
+    .theme-toggle {
+      position: relative;
+      width: 58px;
+      height: 30px;
+      border: 1px solid var(--gold);
+      border-radius: 30px;
+      background: rgba(53,7,24,.8);
+      cursor: pointer;
+      padding: 3px;
+      font-size: 15px;
+      color: var(--gold);
+    }
+    .theme-toggle span {
+      display: grid;
+      place-items: center;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--gold);
+      color: var(--wine-dark);
+      transition: transform .45s cubic-bezier(.4,0,.2,1);
+    }
+    body.dark {
+      --cream: #1b1716;
+      --ink: #eee5d6;
+      background: #1b1716;
+    }
+    body.dark .intro,
+    body.dark .details { background: #241c1a; }
+    body.dark .intro p { color: #d1c6ba; }
+    body.dark .intro-image { border-color: #302724; }
+    body.dark .details { border-top: 1px solid #5d4b3d; }
+    body.dark .detail { border-color: #5d4b3d; }
+    body.dark .detail strong,
+    body.dark h2 { color: #d6bd82; }
+    body.dark .menu-card { background: #302521; color: #eee5d6; }
+    body.dark .menu-card p { color: #cbbcae; }
+    body.dark .theme-toggle span { transform: translateX(27px); }
   </style>
 </head>
 <body>
   <nav>
     <a href="#">예약하기</a>
     <div class="brand"><strong>LA BAROQUE</strong><span>Café · Salon</span></div>
-    <div><a href="#story">우리의 이야기</a><a href="#menu">메뉴</a></div>
+    <div><a href="#story">우리의 이야기</a><a href="#menu">메뉴</a><button class="theme-toggle" id="themeToggle" type="button" aria-label="다크모드 전환" title="다크모드 전환"><span>☀</span></button></div>
   </nav>
 
   <header class="hero">
@@ -221,6 +263,26 @@
         const price = card.querySelector('.price').textContent;
         alert(`${name} — ${price}\n고객님께 가장 매력적인 선택입니다.`);
       });
+    });
+
+    // Theme toggle script
+    const themeToggle = document.querySelector('#themeToggle');
+    const savedTheme = localStorage.getItem('theme');
+
+    function applyTheme(theme) {
+      const isDark = theme === 'dark';
+      document.body.classList.toggle('dark', isDark);
+      themeToggle.querySelector('span').textContent = isDark ? '☾' : '☀';
+      themeToggle.setAttribute('aria-label', isDark ? '라이트모드 전환' : '다크모드 전환');
+      themeToggle.title = isDark ? '라이트모드 전환' : '다크모드 전환';
+    }
+
+    applyTheme(savedTheme || 'light');
+
+    themeToggle.addEventListener('click', () => {
+      const nextTheme = document.body.classList.contains('dark') ? 'light' : 'dark';
+      applyTheme(nextTheme);
+      localStorage.setItem('theme', nextTheme);
     });
   </script>
 </body>
