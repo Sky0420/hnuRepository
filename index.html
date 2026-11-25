@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>La Baroque — 카페 & 다이닝</title>
+  <style>
+    /* Global layout */
+    * { box-sizing: border-box; }
+    :root {
+      --wine: #5b1027;
+      --wine-dark: #350718;
+      --gold: #c6a15b;
+      --cream: #f5eedf;
+      --ink: #2a201d;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--cream);
+      font-family: Georgia, "Times New Roman", "Noto Serif KR", serif;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: .22;
+      z-index: 20;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.12'/%3E%3C/svg%3E");
+    }
+    .eyebrow {
+      color: var(--gold);
+      letter-spacing: .28em;
+      text-transform: uppercase;
+      font-size: 12px;
+      font-weight: bold;
+    }
+    nav {
+      height: 78px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 5.5%;
+      position: absolute;
+      width: 100%;
+      z-index: 10;
+      color: white;
+      border-bottom: 1px solid rgba(198,161,91,.45);
+    }
+    .brand { text-align: center; line-height: 1; }
+    .brand strong { display: block; font-size: 27px; letter-spacing: .12em; }
+    .brand span { color: var(--gold); font-size: 9px; letter-spacing: .38em; }
+    nav a { color: inherit; text-decoration: none; font-size: 13px; letter-spacing: .12em; }
+    nav > div:last-child { display: flex; gap: 28px; }
+    .hero {
+      min-height: 680px;
+      height: 88vh;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      color: white;
+      position: relative;
+      overflow: hidden;
+      background:
+        linear-gradient(90deg, rgba(53,7,24,.82), rgba(53,7,24,.38), rgba(53,7,24,.82)),
+        url("https://images.unsplash.com/photo-1445116572660-236099ec97a0?auto=format&fit=crop&w=1800&q=85") center/cover;
+    }
+    .hero::before, .hero::after {
+      content: "❦";
+      position: absolute;
+      color: rgba(198,161,91,.7);
+      font-size: 38px;
+    }
+    .hero::before { left: 5%; top: 28%; }
+    .hero::after { right: 5%; bottom: 18%; }
+    .hero-content { position: relative; max-width: 760px; padding: 110px 20px 20px; }
+    .ornament { color: var(--gold); font-size: 26px; letter-spacing: .4em; }
+    h1 { font-size: clamp(48px, 7vw, 88px); line-height: .98; margin: 18px 0 20px; font-weight: normal; }
+    .hero p { font-style: italic; font-size: 18px; opacity: .9; }
+    .button {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 15px 28px;
+      border: 1px solid var(--gold);
+      color: white;
+      text-decoration: none;
+      letter-spacing: .16em;
+      font-size: 12px;
+      transition: .25s;
+    }
+    .button:hover { background: var(--gold); color: var(--wine-dark); }
+    section { padding: 90px 7%; }
+    .intro { display: grid; grid-template-columns: 1fr 1fr; gap: 8%; align-items: center; }
+    .intro-image {
+      height: 480px;
+      border: 10px solid white;
+      box-shadow: 0 12px 35px rgba(53,7,24,.15);
+      background: url("https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=900&q=85") center/cover;
+    }
+    h2 { color: var(--wine); font-size: clamp(38px, 5vw, 64px); font-weight: normal; margin: 12px 0 20px; line-height: 1.05; }
+    .intro p { line-height: 1.9; color: #685b54; }
+    .menu-section { background: var(--wine-dark); color: white; text-align: center; }
+    .menu-section h2 { color: white; }
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      max-width: 1180px;
+      margin: 42px auto 0;
+    }
+    .menu-card {
+      background: #f7f0df;
+      color: var(--ink);
+      padding: 14px 14px 22px;
+      border: 1px solid var(--gold);
+      transition: transform .25s, box-shadow .25s;
+    }
+    .menu-card:hover { transform: translateY(-8px); box-shadow: 0 16px 30px rgba(0,0,0,.25); }
+    .menu-card img { width: 100%; height: 210px; object-fit: cover; filter: sepia(.12); }
+    .menu-card h3 { color: var(--wine); font-size: 20px; margin: 18px 0 7px; }
+    .menu-card p { font-size: 13px; color: #77675f; min-height: 40px; }
+    .price { color: var(--gold); font-size: 18px; font-weight: bold; }
+    .details { display: grid; grid-template-columns: repeat(3, 1fr); text-align: center; }
+    .detail { padding: 20px; border-right: 1px solid #dfd2b7; }
+    .detail:last-child { border-right: 0; }
+    .detail strong { display: block; color: var(--wine); font-size: 21px; margin-bottom: 8px; }
+    footer { background: #23040f; color: #dfd4c5; text-align: center; padding: 35px 20px; font-size: 12px; letter-spacing: .08em; }
+    @media (max-width: 850px) {
+      nav > div:last-child { display: none; }
+      .hero { height: 720px; }
+      .intro { grid-template-columns: 1fr; }
+      .intro-image { height: 360px; }
+      .menu-grid { grid-template-columns: repeat(2, 1fr); }
+      .details { grid-template-columns: 1fr; }
+      .detail { border-right: 0; border-bottom: 1px solid #dfd2b7; }
+    }
+    @media (max-width: 520px) {
+      nav { height: 68px; }
+      .menu-grid { grid-template-columns: 1fr; }
+      section { padding: 65px 6%; }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="#">예약하기</a>
+    <div class="brand"><strong>LA BAROQUE</strong><span>Café · Salon</span></div>
+    <div><a href="#story">우리의 이야기</a><a href="#menu">메뉴</a></div>
+  </nav>
+
+  <header class="hero">
+    <div class="hero-content">
+      <div class="ornament">❦</div>
+      <p class="eyebrow">An Afternoon in Splendor</p>
+      <h1>시간이 머무는 곳</h1>
+      <p>우아한 순간과 향긋한 커피가<br>바로크의 장식 속에서 피어납니다.</p>
+      <a class="button" href="#menu">메뉴 살펴보기</a>
+    </div>
+  </header>
+
+  <section class="intro" id="story">
+    <div class="intro-image" role="img" aria-label="아늑한 카페 내부"></div>
+    <div>
+      <p class="eyebrow">Our Story</p>
+      <h2>향의 예술,<br>공간의 연금술</h2>
+      <p>La Baroque는 가장 고전적인 방식으로 커피를 내리고 가장 현대적인 감각으로 공간을 디자인했습니다. 한 잔의 커피에 계절과 장인정신, 그리고 편안한 대화를 담아드립니다.</p>
+      <a class="button" href="#menu" style="color:var(--wine); border-color:var(--wine)">오늘의 컬렉션</a>
+    </div>
+  </section>
+
+  <section class="menu-section" id="menu">
+    <p class="eyebrow">The Royal Selection</p>
+    <h2>Signature Menu</h2>
+    <div class="ornament">✧</div>
+    <div class="menu-grid">
+      <article class="menu-card">
+        <img src="https://images.unsplash.com/photo-1572449043416-55f4685c9bb7?auto=format&fit=crop&w=700&q=85" alt="바닐라 라떼">
+        <h3>Baroque Latte</h3><p>진한 에스프레소와 마다가스카르 바닐라</p><div class="price">₩ 7,500</div>
+      </article>
+      <article class="menu-card">
+        <img src="https://images.unsplash.com/photo-1572442388796-11668a67e53d?auto=format&fit=crop&w=700&q=85" alt="티라미수 라떼">
+        <h3>Tiramisu Cloud</h3><p>에스프레소, 마스카포네 크림과 코코아</p><div class="price">₩ 8,500</div>
+      </article>
+      <article class="menu-card">
+        <img src="https://images.unsplash.com/photo-1556679343-c7306c1976bc?auto=format&fit=crop&w=700&q=85" alt="아이스티">
+        <h3>Rose Garden Tea</h3><p>장미꽃과 히비스커스의 선명한 향</p><div class="price">₩ 7,000</div>
+      </article>
+      <article class="menu-card">
+        <img src="https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&w=700&q=85" alt="크루아상">
+        <h3>Royal Croissant</h3><p>버터 아몬드 크림을 가득 품은 페이스트리</p><div class="price">₩ 6,500</div>
+      </article>
+    </div>
+  </section>
+
+  <section class="details">
+    <div class="detail"><strong>OPENING</strong>매일 10:00 — 21:00</div>
+    <div class="detail"><strong>LOCATION</strong>서울시 종로구 궁궐로 88</div>
+    <div class="detail"><strong>RESERVATION</strong>02-888-1888</div>
+  </section>
+
+  <footer>© 2026 LA BAROQUE CAFÉ · ALL RIGHTS RESERVED</footer>
+
+  <script>
+    const cards = document.querySelectorAll('.menu-card');
+    cards.forEach((card, index) => {
+      card.style.opacity = '0';
+      card.style.transform = 'translateY(24px)';
+      setTimeout(() => {
+        card.style.transition = 'opacity .7s ease, transform .7s ease';
+        card.style.opacity = '1';
+        card.style.transform = 'translateY(0)';
+      }, 180 * (index + 1));
+
+      card.addEventListener('click', () => {
+        const name = card.querySelector('h3').textContent;
+        const price = card.querySelector('.price').textContent;
+        alert(`${name} — ${price}\n고객님께 가장 매력적인 선택입니다.`);
+      });
+    });
+  </script>
+</body>
+</html>
