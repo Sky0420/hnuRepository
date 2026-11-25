@@ -120,6 +120,7 @@
       padding: 14px 14px 22px;
       border: 1px solid var(--gold);
       transition: transform .25s, box-shadow .25s;
+      cursor: pointer;
     }
     .menu-card:hover { transform: translateY(-8px); box-shadow: 0 16px 30px rgba(0,0,0,.25); }
     .menu-card img { width: 100%; height: 210px; object-fit: cover; filter: sepia(.12); }
@@ -132,7 +133,8 @@
     .detail strong { display: block; color: var(--wine); font-size: 21px; margin-bottom: 8px; }
     footer { background: #23040f; color: #dfd4c5; text-align: center; padding: 35px 20px; font-size: 12px; letter-spacing: .08em; }
     @media (max-width: 850px) {
-      nav > div:last-child { display: none; }
+      nav > div:last-child { display: flex; }
+      nav > div:last-child a { display: none; }
       .hero { height: 720px; }
       .intro { grid-template-columns: 1fr; }
       .intro-image { height: 360px; }
@@ -187,11 +189,83 @@
     body.dark .menu-card h3 { color: #f0cf86; }
     body.dark .menu-card p { color: #d7cabd; }
     body.dark .theme-toggle span { transform: translateX(27px); }
+    .menu-card { cursor: pointer; }
+    .modal {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: none;
+      place-items: center;
+      padding: 20px;
+      background: rgba(24, 8, 12, .78);
+      backdrop-filter: blur(8px);
+    }
+    .modal.open { display: grid; }
+    .modal-panel {
+      width: min(760px, 100%);
+      max-height: 90vh;
+      overflow-y: auto;
+      position: relative;
+      background: var(--cream);
+      color: var(--ink);
+      border: 1px solid var(--gold);
+      box-shadow: 0 24px 70px rgba(0,0,0,.38);
+    }
+    .modal-close {
+      position: absolute;
+      right: 16px;
+      top: 16px;
+      z-index: 2;
+      width: 38px;
+      height: 38px;
+      border: 1px solid var(--gold);
+      border-radius: 50%;
+      background: var(--cream);
+      color: var(--ink);
+      font-size: 22px;
+      cursor: pointer;
+    }
+    .menu-modal-content { display: grid; grid-template-columns: 44% 56%; }
+    .menu-modal-content img { width: 100%; height: 100%; min-height: 420px; object-fit: cover; }
+    .menu-modal-info { padding: 48px 38px 38px; }
+    .menu-modal-info h3 { color: var(--wine); font-size: 32px; margin: 8px 0 12px; }
+    .menu-modal-info .menu-description { line-height: 1.8; }
+    .detail-list { margin: 22px 0; border-top: 1px solid rgba(198,161,91,.55); }
+    .detail-row { display: flex; justify-content: space-between; gap: 20px; padding: 12px 0; border-bottom: 1px solid rgba(198,161,91,.55); font-size: 14px; }
+    .detail-row span:first-child { color: #8b796c; }
+    .modal-price { color: var(--gold); font-size: 28px; font-weight: bold; }
+    .reservation-content { max-width: 560px; padding: 38px; }
+    .reservation-content h3 { color: var(--wine); font-size: 32px; margin: 8px 0 24px; }
+    .reservation-form { display: grid; gap: 14px; }
+    .reservation-form label { display: grid; gap: 7px; font-size: 13px; font-weight: bold; }
+    .reservation-form input,
+    .reservation-form select {
+      width: 100%;
+      padding: 13px;
+      border: 1px solid #cbbda7;
+      background: white;
+      color: #2a201d;
+      font-family: inherit;
+      font-size: 15px;
+    }
+    .reservation-form button { margin: 8px 0 0; background: var(--wine); color: white; border: 0; cursor: pointer; }
+    body.dark .modal-panel,
+    body.dark .modal-close,
+    body.dark .reservation-form input,
+    body.dark .reservation-form select { background: #302521; color: #eee5d6; }
+    body.dark .menu-modal-info h3,
+    body.dark .reservation-content h3 { color: #f0cf86; }
+    @media (max-width: 650px) {
+      .menu-modal-content { grid-template-columns: 1fr; }
+      .menu-modal-content img { min-height: 260px; max-height: 260px; }
+      .menu-modal-info { padding: 32px 24px 28px; }
+      .reservation-content { padding: 32px 22px 24px; }
+    }
   </style>
 </head>
 <body>
   <nav>
-    <a href="#">예약하기</a>
+    <a href="#reservation" id="reservationOpen">예약하기</a>
     <div class="brand"><strong>LA BAROQUE</strong><span>Café · Salon</span></div>
     <div><a href="#story">우리의 이야기</a><a href="#menu">메뉴</a><button class="theme-toggle" id="themeToggle" type="button" aria-label="다크모드 전환" title="다크모드 전환"><span>☀</span></button></div>
   </nav>
@@ -221,19 +295,19 @@
     <h2>Signature Menu</h2>
     <div class="ornament">✧</div>
     <div class="menu-grid">
-      <article class="menu-card">
+      <article class="menu-card" data-name="Baroque Latte" data-price="₩ 7,500" data-description="마다가스카르산 바닐라와 균형 잡힌 에스프레소가 어우러진 시그니처 라떼입니다." data-origin="원두: 콜롬비아 수프리모 / 바닐라: 마다가스카르" data-note="카카오 니브 · 캐러멜 · 바닐라" data-caffeine="카페인 약 135mg">
         <img src="https://images.unsplash.com/photo-1572449043416-55f4685c9bb7?auto=format&fit=crop&w=700&q=85" alt="바닐라 라떼">
         <h3>Baroque Latte</h3><p>진한 에스프레소와 마다가스카르 바닐라</p><div class="price">₩ 7,500</div>
       </article>
-      <article class="menu-card">
+      <article class="menu-card" data-name="Tiramisu Cloud" data-price="₩ 8,500" data-description="깊은 에스프레소와 부드러운 마스카포네 크림을 겹겹이 올린 티라미수 스타일 음료입니다." data-origin="원두: 브라질 세라도 / 초콜릿: 벨기에산" data-note="코코아 · 마스카포네 · 구운 헤이즐넛" data-caffeine="카페인 약 150mg">
         <img src="https://images.unsplash.com/photo-1572442388796-11668a67e53d?auto=format&fit=crop&w=700&q=85" alt="티라미수 라떼">
         <h3>Tiramisu Cloud</h3><p>에스프레소, 마스카포네 크림과 코코아</p><div class="price">₩ 8,500</div>
       </article>
-      <article class="menu-card">
+      <article class="menu-card" data-name="Rose Garden Tea" data-price="₩ 7,000" data-description="장미와 히비스커스의 향긋함을 보존한 상큼한 수제 티로, 더운 날과 미식 후에 특히 잘 어울립니다." data-origin="장미: 불가리아산 / 히비스커스: 이집트산" data-note="장미 · 산딸기 · 석류" data-caffeine="카페인 없음">
         <img src="https://images.unsplash.com/photo-1556679343-c7306c1976bc?auto=format&fit=crop&w=700&q=85" alt="아이스티">
         <h3>Rose Garden Tea</h3><p>장미꽃과 히비스커스의 선명한 향</p><div class="price">₩ 7,000</div>
       </article>
-      <article class="menu-card">
+      <article class="menu-card" data-name="Royal Croissant" data-price="₩ 6,500" data-description="겹겹이 구운 버터 크루아상에 아몬드 크림을 넣고 설탕과 아몬드 슬라이스로 마무리했습니다." data-origin="버터: 프랑스산 / 아몬드: 캘리포니아산" data-note="버터 · 아몬드 · 브라운 슈거" data-caffeine="해당 없음">
         <img src="https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&w=700&q=85" alt="크루아상">
         <h3>Royal Croissant</h3><p>버터 아몬드 크림을 가득 품은 페이스트리</p><div class="price">₩ 6,500</div>
       </article>
@@ -251,6 +325,53 @@
     운영자 : 유하늘, yhn1319@gmail.com
   </footer>
 
+  <div class="modal" id="menuModal" role="dialog" aria-labelledby="menuModalLabel" aria-hidden="true">
+    <div class="modal-panel">
+      <button class="modal-close" id="menuModalClose" aria-label="메뉴 닫기">&times;</button>
+      <div class="menu-modal-content">
+        <img src="" alt="" id="modalImage">
+        <div class="menu-modal-info">
+          <h3 id="modalTitle">메뉴 제목</h3>
+          <p class="menu-description" id="modalDescription">메뉴 설명</p>
+          <div class="detail-list" id="modalDetails">
+            <div class="detail-row"><span>가격</span><span class="modal-price" id="modalPrice">₩ 0</span></div>
+            <div class="detail-row"><span>원산지</span><span id="modalOrigin">정보 없음</span></div>
+            <div class="detail-row"><span>카페인 함량</span><span id="modalCaffeine">정보 없음</span></div>
+            <div class="detail-row"><span>기타 메모</span><span id="modalNote">정보 없음</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="reservationModal" role="dialog" aria-labelledby="reservationModalLabel" aria-hidden="true">
+    <div class="modal-panel">
+      <button class="modal-close" id="reservationModalClose" aria-label="예약 닫기">&times;</button>
+      <div class="reservation-content">
+        <h3>예약하기</h3>
+        <form class="reservation-form" id="reservationForm" novalidate>
+          <label for="resName">이름</label>
+          <input type="text" id="resName" name="resName" required>
+          <label for="resDate">날짜</label>
+          <input type="date" id="resDate" name="resDate" required>
+          <label for="resTime">시간</label>
+          <input type="time" id="resTime" name="resTime" required>
+          <label for="resPeople">인원 수</label>
+          <select id="resPeople" name="resPeople" required>
+            <option value="">선택하세요</option>
+            <option value="1">1명</option>
+            <option value="2">2명</option>
+            <option value="3">3명</option>
+            <option value="4">4명</option>
+            <option value="5">5명</option>
+            <option value="6">6명</option>
+          </select>
+          <button type="submit">예약 확인</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
   <script>
     const cards = document.querySelectorAll('.menu-card');
     cards.forEach((card, index) => {
@@ -265,8 +386,50 @@
       card.addEventListener('click', () => {
         const name = card.querySelector('h3').textContent;
         const price = card.querySelector('.price').textContent;
-        alert(`${name} — ${price}\n고객님께 가장 매력적인 선택입니다.`);
+        const description = card.getAttribute('data-description');
+        const origin = card.getAttribute('data-origin');
+        const note = card.getAttribute('data-note');
+        const caffeine = card.getAttribute('data-caffeine');
+        const image = card.querySelector('img').src;
+
+        document.getElementById('modalTitle').textContent = name;
+        document.getElementById('modalPrice').textContent = price;
+        document.getElementById('modalDescription').textContent = description;
+        document.getElementById('modalOrigin').textContent = origin;
+        document.getElementById('modalCaffeine').textContent = caffeine;
+        document.getElementById('modalNote').textContent = note;
+        document.getElementById('modalImage').src = image;
+
+        document.getElementById('menuModal').classList.add('open');
       });
+    });
+
+    document.getElementById('menuModalClose').addEventListener('click', () => {
+      document.getElementById('menuModal').classList.remove('open');
+    });
+
+    // Reservation modal
+    const reservationOpen = document.getElementById('reservationOpen');
+    const reservationClose = document.getElementById('reservationModalClose');
+    const reservationModal = document.getElementById('reservationModal');
+
+    reservationOpen.addEventListener('click', (e) => {
+      e.preventDefault();
+      reservationModal.classList.add('open');
+    });
+
+    reservationClose.addEventListener('click', () => {
+      reservationModal.classList.remove('open');
+    });
+
+    document.getElementById('reservationForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (!e.target.reportValidity()) return;
+      const formData = new FormData(e.target);
+      const resDetails = `이름: ${formData.get('resName')}\n날짜: ${formData.get('resDate')}\n시간: ${formData.get('resTime')}\n인원 수: ${formData.get('resPeople')}`;
+      alert(`예약이 완료되었습니다:\n${resDetails}`);
+      reservationModal.classList.remove('open');
+      e.target.reset();
     });
 
     // Theme toggle script
@@ -287,6 +450,23 @@
       const nextTheme = document.body.classList.contains('dark') ? 'light' : 'dark';
       applyTheme(nextTheme);
       localStorage.setItem('theme', nextTheme);
+    });
+
+    // Prevent past reservation dates
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('resDate').min = today;
+
+    [document.getElementById('menuModal'), reservationModal].forEach((modal) => {
+      modal.addEventListener('click', (event) => {
+        if (event.target === modal) modal.classList.remove('open');
+      });
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        document.getElementById('menuModal').classList.remove('open');
+        reservationModal.classList.remove('open');
+      }
     });
   </script>
 </body>
